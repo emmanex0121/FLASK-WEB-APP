@@ -7,4 +7,6 @@ MVP - minimum viable Product - a cost-effective way to confirm whether your busi
 flask-login (module) - for loggin users in
 flask-sqlalchemy (module) - database thing, wrapper for sql - makes it easier to create database model, add, delete etc.
 
+jinja - special templating language useable with flask and allows for some python inside the html document
+
 ### Emmanuel Nwachukwu[<emmax0121@gmail.com>]
