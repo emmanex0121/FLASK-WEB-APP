@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from os import path
+from flask_login import LoginManager
 
 db = SQLAlchemy()
 DB_NAME = 'database.db'
@@ -24,4 +26,29 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
+    # Check if the database exists before we start the app
+    from .models import User, Note
+    with app.app_context():
+        create_database()
+    
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login' # redirect to auth.login if user is not logged in where there is a @loginrequired
+    login_manager.init_app(app)
+
+    # Telling flask how we load a user
+    # Telling flask what user we are looking for
+    # looking for user model and we gonna refeence them by their id
+    # and the DECORATOR is saying use the load_user function to load user
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
+
     return app
+
+def create_database():
+    """
+        Creates Database if it doesnt exists
+    """
+    if not path.exists('website/' + DB_NAME):
+        db.create_all()
+        print('Created Database!')
